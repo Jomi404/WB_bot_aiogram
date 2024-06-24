@@ -1,17 +1,18 @@
-# This is a sample Python script.
+import asyncio
+import logging
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+import core.utils as utils
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
-    print_hi('PyCharm')
+async def main(dp: utils.create_dp.Dispatcher):
+    logging.basicConfig(level=logging.INFO, format='%(asctime)s - [%(levelname)s] - %(name)s'
+                                                   '(%(filename)s).%(funcName)s(%(lineno)d) - %(message)s')
+    await utils.bot.delete_webhook(drop_pending_updates=True)
+    try:
+        await dp.start_polling(utils.bot)
+    finally:
+        await utils.bot.session.close()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+if __name__ == "__main__":
+    asyncio.run(main(utils.dp))
