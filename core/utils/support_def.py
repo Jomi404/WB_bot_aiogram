@@ -4,6 +4,7 @@ import os
 
 import aiofiles
 
+
 from core.logger_csm import CustomFormatter
 
 logger = logging.getLogger(__name__)
@@ -32,7 +33,7 @@ async def get_data_json(path: str) -> dict | None:
             dict | None: Data from a JSON file in the form of a dictionary, or None in case of an error.
     """
     try:
-        async with aiofiles.open(file=path, mode='r') as json_file:
+        async with aiofiles.open(file=path, mode='r', encoding='utf-8') as json_file:
             data = await json_file.read()
             users_data = json.loads(data)
         logger.info(f"Data has been read from the file: {json_file.name} successfully.")
@@ -61,9 +62,7 @@ async def is_new_users(user_id: int) -> bool | None:
                    and the function returns None.
     """
     try:
-        #current_folder = os.path.dirname(__file__)
-        #relative_path = os.path.join(current_folder, 'data', 'users.json') - чтобы получить относительный путь (в Pycharm у меня отн пути не работают)
-        users_data = await get_data_json(path='W:\\WB_BOT\\WB_bot_aiogram\\core\\data\\users.json')
+        users_data = await get_data_json(path="core/data/users.json")
     except Exception as e:
         logger.error(f"An error has occurred: {e}")
         return None
@@ -74,10 +73,8 @@ async def is_new_users(user_id: int) -> bool | None:
 
 
 async def add_user_to_json(user_id):
-    # current_folder = os.path.dirname(__file__)
-    # relative_path = os.path.join(current_folder, 'data', 'users.json') - чтобы получить относительный путь (в Pycharm у меня отн пути не работают)
     new_user = {"id": user_id}
-    filename = 'W:\\WB_BOT\\WB_bot_aiogram\\core\\data\\users.json' #НЕОБХОДИМО заменить когда будешь заливать на сервер
+    filename = "core/data/users.json"
 
     try:
         async with aiofiles.open(filename, mode='r+') as file:
@@ -97,3 +94,4 @@ async def add_user_to_json(user_id):
 
     except Exception as e:
         print(f"An error occurred: {e}")
+

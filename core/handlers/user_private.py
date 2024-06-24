@@ -1,4 +1,5 @@
 import logging
+import os
 
 from aiogram.enums import ParseMode
 from aiogram.filters import CommandStart
@@ -29,6 +30,7 @@ user_private_router.callback_query.filter(ChatTypeFilterCall(['private']))
 async def cmd_start(message: types.Message):
 
     # функция проверки пользователя в json-файле users и в случае если пользователь новый то добавляем
+    # нужно добавить проверку на существование файла или просто создавать
     if await utils.is_new_users(user_id=message.from_user.id):
         await utils.add_user_to_json(user_id=message.from_user.id)
 
@@ -86,3 +88,5 @@ async def main_menu(callback: types.CallbackQuery):
     reply_markup = keyboards_bot.get_start_btns(link=link_web_app, sizes=(1,))
     await callback.message.edit_text(inline_message_id=callback.inline_message_id, text=text, reply_markup=reply_markup,
                                      parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+
+

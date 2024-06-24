@@ -132,9 +132,10 @@ async def process_get_photo(callback: types.CallbackQuery, state: FSMContext):
     data = await state.get_data()
     caption = (f"{data['mailling_name']}\n"
                f"{data['mailling_description']}")
-    users_json = await utils.get_data_json(path='W:\\WB_BOT\\WB_bot_aiogram\\core\\data\\users.json')  # ЗАМЕНИТЬ ПУТЬ
+    users_json = await utils.get_data_json(path="core/data/users.json")
     for user in users_json['users']:
         await utils.bot.send_photo(chat_id=user['id'], photo=data['msg_photo'], caption=caption)
+
     await utils.bot.send_message(chat_id=callback.from_user.id, text='Рассылка отправлена.')
     await state.clear()
 
